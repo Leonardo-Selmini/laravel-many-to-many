@@ -16,6 +16,11 @@
       @if(isset($post->category))
       <h5>Category: {{$post->category->name}}</h5>
       @endif
+      @if(isset($post->tags))
+        @foreach ($post->tags as $tag)
+          <span class="badge badge-secondary">{{$tag->name}}</span>
+        @endforeach
+      @endif
       <p class="card-text">{{$post->content}}</p>
       <a href="{{route("posts.edit", $post->id)}}" class="d-inline">
         <button class="btn btn-link">Edit</button>

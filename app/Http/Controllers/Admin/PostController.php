@@ -50,13 +50,14 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-      dd($request->all());
+      // dd($request);
       // validation
       $request->validate([
         "title" => "required|string|max:100",
         "content" => "required|string",
         "published" => "sometimes|accepted",
-        "category_id" => "nullable|exists:categories,id"
+        "category_id" => "nullable|exists:categories,id",
+        "tags" => "nullable|exists:tags,id"
       ]);
       // create
       $data = $request->all();
@@ -78,6 +79,12 @@ class PostController extends Controller
       $newPost->category_id = $data["category_id"];
 
       $newPost->save();
+
+      // salvo i dati dei tag nella tabella ponte
+      if(isset($data["tags"])){
+        $newPost->tags()->sync($data["tags"]);
+      }
+
       // redirect
       return redirect()->route("posts.show", $newPost->id);
     }
@@ -108,7 +115,8 @@ class PostController extends Controller
     public function edit(Post $post)
     {
       $categories = Category::all();
-      return view("admin.edit", compact("post", "categories"));
+      $tags = Tag::all();
+      return view("admin.edit", compact("post", "categories", "tags"));
     }
 
 
@@ -127,7 +135,8 @@ class PostController extends Controller
         $request->validate([
           "title" => "required|string|max:100",
           "content" => "required|string",
-          "published" => "sometimes|accepted"
+          "published" => "sometimes|accepted",
+          "tags" => "nullable|exists:tags,id"
         ]);
         // create
         $data = $request->all();
@@ -149,6 +158,9 @@ class PostController extends Controller
         $post->category_id = $data["category_id"];
   
         $post->save();
+
+        $post->tags()->sync($data["tags"]);
+
         // redirect
         return redirect()->route("posts.show", $post->id);
     }

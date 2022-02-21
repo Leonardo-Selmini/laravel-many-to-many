@@ -26,6 +26,20 @@
           @enderror
         </div>
 
+        <div class="form-group form-check form-check-inline">
+          @foreach ($tags as $tag)
+          @if (old("tags"))
+          <input name="tags[]" value="{{$tag->id}}" {{in_array($tag->id, old("tags"))? "checked" : ""}} type="checkbox" class="form-check-input" id="{{$tag->id}}">
+          @else 
+          <input name="tags[]" value="{{$tag->id}}" {{$post->tags->contains($tag)? "checked" : ""}} type="checkbox" class="form-check-input" id="{{$tag->id}}">
+          @endif
+          <label class="form-check-label mr-4" for="{{$tag->id}}">{{$tag->name}}</label>
+          @endforeach
+          @error('tag_id')
+            <div class="alert alert-danger">{{ $message }}</div>
+          @enderror
+        </div>
+
         <div class="form-group">
           <label for="title">Title</label>
           <input name="title" type="text" class="form-control @error('title') is-invalid @enderror" id="title" placeholder="Insert a title" value="{{old("title")? old("title") : $post->title}}">
