@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Category;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 use App\Post;
-use App\Category;
+use Illuminate\Support\Str;
+use App\Tag;
 
 class PostController extends Controller
 {
@@ -17,8 +18,8 @@ class PostController extends Controller
      */
     public function index()
     {
-      $posts = Post::all();
       $categories = Category::all();
+      $posts = Post::all();
       return view("admin.index", compact("posts", "categories"));
     }
 
@@ -34,7 +35,8 @@ class PostController extends Controller
     public function create()
     {
       $categories = Category::all();
-      return view("admin.create", compact("categories"));
+      $tags = Tag::all();
+      return view("admin.create", compact("categories", "tags"));
     }
 
 
@@ -48,6 +50,7 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
+      dd($request->all());
       // validation
       $request->validate([
         "title" => "required|string|max:100",

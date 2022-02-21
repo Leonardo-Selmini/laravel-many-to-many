@@ -25,6 +25,16 @@
           @enderror
         </div>
 
+        <div class="form-group form-check form-check-inline">
+          @foreach ($tags as $tag)
+          <input name="tags[]" value="{{$tag->id}}" type="checkbox" class="form-check-input" id="{{$tag->id}}" {{(old(""))? "checked" : "" }}>
+          <label class="form-check-label mr-4" for="{{$tag->id}}">{{$tag->name}}</label>
+          @endforeach
+          @error('tag_id')
+            <div class="alert alert-danger">{{ $message }}</div>
+          @enderror
+        </div>
+
         <div class="form-group">
           <label for="title">Title</label>
           <input name="title" type="text" class="form-control @error('title') is-invalid @enderror" id="title" placeholder="Insert a title" value="{{old("title")}}">
@@ -42,8 +52,11 @@
         </div>
 
         <div class="form-group form-check">
-          <input name="posted" type="checkbox" class="form-check-input" id="published" {{(old("published"))? "checked" : "" }}>
-          <label class="form-check-label" for="published">Publish</label>
+          <input name="posted" type="checkbox" class="form-check-input" id="posted" {{(old("posted"))? "checked" : "" }}>
+          <label class="form-check-label" for="posted">Publish</label>
+          @error('posted')
+            <div class="alert alert-danger">{{ $message }}</div>
+          @enderror
         </div>
 
         <button type="submit" class="btn btn-primary">Create</button>
